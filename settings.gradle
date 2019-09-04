@@ -1,0 +1,4 @@
+rootProject.name = 'templates'
+
+include ":stop"
+project(":stop").projectDir = file("../stop-java")
