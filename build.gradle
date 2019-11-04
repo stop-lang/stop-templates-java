@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id "com.jfrog.bintray" version "1.8.4"
 }
 
 group 'org.stop_lang'
@@ -10,10 +11,17 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven {
+        url  "https://dl.bintray.com/stop-lang/stop"
+    }
 }
 
 dependencies {
-    implementation project(":stop")
+    if (rootProject.hasProperty("development")) {
+        implementation project(":stop")
+    }else {
+        implementation 'org.stop_lang:stop:1.1.0'
+    }
 
     implementation group: 'org.antlr', name: 'antlr4-runtime', version: '4.7.2'
     implementation group: 'org.antlr', name: 'symtab', version: '1.0.8'
@@ -28,16 +36,33 @@ task sourcesJar(type: Jar) {
     archiveClassifier = 'sources'
 }
 
-publishing {
-    repositories {
-        maven {
-            url = repoUrl
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['mavenJava']
+    pkg {
+        repo = 'stop'
+        name = 'stop-templates'
+        userOrg = 'stop-lang'
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/stop-lang/stop-runtime-java.git'
+        version {
+            name = version
+            desc = version
+            released  = new Date()
+            vcsTag = version
+            attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
         }
     }
+    publish = true
+}
 
+publishing {
     publications {
         mavenJava(MavenPublication) {
             artifactId = 'stop-templates'
+            groupId = group
+            version version
             from components.java
             artifact sourcesJar
             versionMapping {
