@@ -43,7 +43,8 @@ public class TemplateEngineTest {
         StateInstance user = new StateInstance(userState, userProps);
         post.put("user", user);
         props.put("realUser", user);
-        State postState = stop.getStates().get("Post");
+        post.put("audio_url", "test.mp3");
+        State postState = stop.getStates().get("Podcast");
         StateInstance postInstance = new StateInstance(postState, post);
         a.add(postInstance);
         props.put("posts", a);

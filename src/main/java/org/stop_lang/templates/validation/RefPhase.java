@@ -35,7 +35,7 @@ public class RefPhase extends StopTemplatesBaseListener {
         this.templateState = templateState;
         this.node = root;
 
-        this.childrenProperty = new Property("children", Property.PropertyType.STRING, true, null, false);
+        this.childrenProperty = new Property("children", Property.PropertyType.STRING, true, null, false, false);
         this.globals.define(new ReferenceSymbol(this.childrenProperty.getName(), this.childrenProperty));
 
         for (Map.Entry<String, Property> propertyEntry : templateState.getProperties().entrySet()){
@@ -161,11 +161,11 @@ public class RefPhase extends StopTemplatesBaseListener {
         currentScope = scopes.get(ctx);
 
         if (ctx.NOT() == null) {
-            Property collectionItem = new Property(property.getName(), property.getType(), false, null, false);
+            Property collectionItem = new Property(property.getName(), property.getType(), false, null, false, property.isAnnotation());
 
             if (property instanceof StateProperty) {
                 StateProperty stateProperty = (StateProperty) property;
-                collectionItem = new StateProperty(property.getName()+"_item", stateProperty.getState(), false, null, false, null);
+                collectionItem = new StateProperty(property.getName()+"_item", stateProperty.getState(), false, null, false, stateProperty.isAnnotation(), null);
                 for (Map.Entry<String, Property> statePropertyEntry : stateProperty.getState().getProperties().entrySet()) {
                     currentScope.getEnclosingScope().define(new ReferenceSymbol(statePropertyEntry.getKey(), statePropertyEntry.getValue()));
                 }

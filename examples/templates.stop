@@ -3,7 +3,7 @@ start Request {
 }
 
 stop Posts {
-    [Post] posts
+    [@Post] posts
     optional User currentUser
     optional string fuck
     optional string dingus
@@ -21,6 +21,17 @@ Post {
 
 }
 
+@Post
+Podcast {
+    string title
+    string body
+    string description
+    [string] tags
+    optional string fuckface
+    optional User user
+    string audio_url
+}
+
 PostItemComponent {
     string title
     string body
@@ -31,7 +42,7 @@ PostItemComponent {
 }
 
 PostComponent {
-    Post post
+    @Post post
 }
 
 FooterComponent {
